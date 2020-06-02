@@ -1,5 +1,5 @@
 ### Python Class Project:  War, the card game
-
+import random
 
 number_of_decks   = 1
 number_of_players = 2
@@ -15,7 +15,7 @@ class Card:
         self.rank = rank
 
     def __str__(self):
-        return str(self.suit) + str(self.rank) 
+        return str(self.rank) + str(self.suit) 
 
     
 ###################################################################
@@ -30,13 +30,16 @@ class Deck:
                 for rank in ranks:
                     self.mydeck.append( Card(suit,rank) )
 
+    def Shuffle(self):
+        random.shuffle( self.mydeck )
 
-    def shuffle(self):
-        pass
 
-    def draw(self):
-        pass
+    def Draw(self):
+        self.mydeck.pop(0)
 
+
+    def __len__(self):
+       return len(self.mydeck)
     
     def __str__(self):
         s = ""
@@ -49,12 +52,47 @@ class Deck:
 ###################################################################
 class Hand:
 
-    pass
+    def __init__(self):
+
+        pass
+
+    def AddCard(self,card):
+        pass
+
+    def GetCard(self):
+        pass
+
+
+    def __len__(self):
+        pass
+
+    def __str__(self):
+        pass
+
 
 ###################################################################
 class Game:
 
-    pass
+
+    def __init__(self):
+
+        self.deck = Deck()
+
+
+    def Play(self):
+
+        print( str(self.deck)  )
+
+        self.deck.Shuffle()
+
+        print( str(self.deck)  )
+
+
+        for i in range( len(self.deck) ):
+            self.deck.Draw()
+            print( str(self.deck)  )
+
+
 
 
 ################
@@ -66,9 +104,15 @@ def main():
     
     #...Do Something...
 
-    deck = Deck()
+    game = Game()
 
-    print(deck)
+    game.Play()
+
+
+
+ #   deck = Deck()
+
+ #   print(deck)
 
 
     print("Done!")
