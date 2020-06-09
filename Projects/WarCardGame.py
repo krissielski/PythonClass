@@ -21,11 +21,11 @@ class Card:
 ###################################################################
 class Deck:
 
-    def __init__(self):
+    def __init__(self, num_decks):
 
         self.mydeck = []
 
-        for deck in range( number_of_decks ):
+        for deck in range( num_decks ):
             for suit in suits:
                 for rank in ranks:
                     self.mydeck.append( Card(suit,rank) )
@@ -35,7 +35,7 @@ class Deck:
 
 
     def Draw(self):
-        self.mydeck.pop(0)
+        return self.mydeck.pop(0)
 
 
     def __len__(self):
@@ -53,21 +53,26 @@ class Deck:
 class Hand:
 
     def __init__(self):
+        self.myhand = []
 
-        pass
 
     def AddCard(self,card):
-        pass
+        self.myhand.append(card)
 
     def GetCard(self):
-        pass
+        return self.myhand.pop(0)
 
-
+    def GetNumCards(self):
+        return len( self.myhand)
+        
     def __len__(self):
-        pass
+        return len( self.myhand)
 
     def __str__(self):
-        pass
+        s = ""
+        for card in self.myhand:
+            s += str(card) + " "
+        return s
 
 
 ###################################################################
@@ -76,21 +81,44 @@ class Game:
 
     def __init__(self):
 
-        self.deck = Deck()
+        self.deck = Deck( number_of_decks )
+
+        # #DO NOT DO THIS
+        # self.player1 = Hand()
+        # self.player2 = Hand()
+
+        self.players = []
+
+        for i in range(number_of_players ):
+            self.players.append( Hand() )
+
+
+
 
 
     def Play(self):
 
         print( str(self.deck)  )
-
         self.deck.Shuffle()
-
         print( str(self.deck)  )
 
 
-        for i in range( len(self.deck) ):
-            self.deck.Draw()
-            print( str(self.deck)  )
+
+        for i in range(  int( len(self.deck) / number_of_players)  ):
+
+            for j in range (number_of_players):
+
+                self.players[j].AddCard(  self.deck.Draw()   )
+
+
+        for i in range(number_of_players):
+
+            print(i,"=",str(self.players[i]) )
+
+
+        # for i in range( len(self.deck) ):
+        #     self.deck.Draw()
+        #     print( str(self.deck)  )
 
 
 
@@ -101,18 +129,20 @@ class Game:
 
 def main():
     print("In Main!")
-    
-    #...Do Something...
 
     game = Game()
-
     game.Play()
 
+    # HAND test
+    # hand = Hand()
+    # card = Card('h','2')
+    # print("++++++++++++++++++++++")
+    # print(">>>", str( hand) )
+    # hand.AddCard(card)
+    # print( ">>>",str( hand) )
+    # hand.GetCard()
+    # print( ">>>",str( hand) )
 
-
- #   deck = Deck()
-
- #   print(deck)
 
 
     print("Done!")
