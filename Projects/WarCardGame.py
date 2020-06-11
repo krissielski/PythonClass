@@ -4,8 +4,12 @@ import random
 number_of_decks   = 1
 number_of_players = 2
 
-suits = ( 'D', 'H', 'S', 'C' )
+suits = ( 'D', 'H') #, 'S', 'C' )
 ranks = ( '2','3','4','5','6','7','8','9','T','J','Q','K','A' )
+
+#rank to integer
+r2i = { '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':11, 'Q':12, 'K':13, 'A':14 }
+
 
 
 ###################################################################
@@ -16,6 +20,12 @@ class Card:
 
     def __str__(self):
         return str(self.rank) + str(self.suit) 
+
+    def GetVal(self):
+        return(  r2i[self.rank] )
+
+
+
 
     
 ###################################################################
@@ -103,22 +113,67 @@ class Game:
         print( str(self.deck)  )
 
 
-
+        #Deal to players
         for i in range(  int( len(self.deck) / number_of_players)  ):
-
             for j in range (number_of_players):
-
                 self.players[j].AddCard(  self.deck.Draw()   )
 
-
+        #Debug output
         for i in range(number_of_players):
-
             print(i,"=",str(self.players[i]) )
 
 
         # for i in range( len(self.deck) ):
         #     self.deck.Draw()
         #     print( str(self.deck)  )
+
+
+        turn = 1
+
+        while( True ):
+
+
+            print("*********************************")
+            print("Turn ",turn)
+
+            p0 = self.players[0].GetCard()
+            p1 = self.players[1].GetCard()
+
+            print( p0.rank, p1.rank )
+            print( p0.GetVal(), p1.GetVal() )
+
+
+            if( p0.GetVal() > p1.GetVal() ):
+                #P0 Wins
+                print(str(p0),str(p1),  "   P0 Wins")
+
+                self.players[0].AddCard(p0)
+                self.players[0].AddCard(p1)
+
+
+            elif( p0.GetVal() < p1.GetVal() ):
+                #P1 Wins
+                print(str(p0),str(p1),  "   P1 Wins")
+
+                self.players[1].AddCard(p0)
+                self.players[1].AddCard(p1)
+
+            else:
+                #Tie
+                print(str(p0),str(p1),  "   TIE!!")
+
+
+            #Debug output
+            for i in range(number_of_players):
+                print(i,"=",str(self.players[i]) )
+
+
+            input("Hit Enter....")
+
+            turn += 1
+
+
+
 
 
 
