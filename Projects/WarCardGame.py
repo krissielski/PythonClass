@@ -65,7 +65,6 @@ class Hand:
     def __init__(self):
         self.myhand = []
 
-
     def AddCard(self,card):
         self.myhand.append(card)
 
@@ -86,6 +85,34 @@ class Hand:
 
 
 ###################################################################
+class War:
+
+    def __init__(self):
+        self.mywar = []
+
+    def AddCard(self,card):
+        self.mywar.append(card)
+
+    def GetCard(self):
+        return self.mywar.pop(0)
+
+    def SeeCard(self):
+        return self.mywar[-1]      
+  
+    def GetNumCards(self):
+        return len( self.mywar)
+        
+    def __len__(self):
+        return len( self.mywar)
+
+    def __str__(self):
+        s = ""
+        for card in self.mywar:
+            s += str(card) + " "
+        return s
+
+
+###################################################################
 class Game:
 
 
@@ -99,11 +126,18 @@ class Game:
 
         self.players = []
 
+            
         for i in range(number_of_players ):
-            self.players.append( Hand() )
 
+            cards = {}
+            cards['hand'] = Hand()
+            cards['war']  = War()
+            self.players.append( cards  )
 
-
+            #self.players
+            #   player number
+            #       ['hand']
+            #       ['war']
 
 
     def Play(self):
@@ -116,11 +150,15 @@ class Game:
         #Deal to players
         for i in range(  int( len(self.deck) / number_of_players)  ):
             for j in range (number_of_players):
-                self.players[j].AddCard(  self.deck.Draw()   )
+                #self.players[j].AddCard(  self.deck.Draw()   ) #Not anymore
+
+                self.players[j]['hand'].AddCard( self.deck.Draw() )
+
+
 
         #Debug output
         for i in range(number_of_players):
-            print(i,"=",str(self.players[i]) )
+            print(i,"=",str(self.players[i]['hand']) )
 
 
         # for i in range( len(self.deck) ):
@@ -136,36 +174,64 @@ class Game:
             print("*********************************")
             print("Turn ",turn)
 
-            p0 = self.players[0].GetCard()
-            p1 = self.players[1].GetCard()
+            #Was
+            #p0 = self.players[0].GetCard()
+            #p1 = self.players[1].GetCard()
 
-            print( p0.rank, p1.rank )
-            print( p0.GetVal(), p1.GetVal() )
+            #Is now
+            #Move card from Hand to War for each player
+            for i in range(number_of_players):
+                self.players[i]['war'].AddCard(  self.players[i]['hand'].GetCard() ) 
+
+
+            #Debug
+            print( self.players[0]['war'].SeeCard() , self.players[1]['war'].SeeCard() )
+
+            print("0 = ", self.players[0]['war'] )
+            print("1 = ", self.players[1]['war'] )
+
+
+
+            #Pull out card to make if statements easier
+            p0 = self.players[0]['war'].SeeCard()
+            p1 = self.players[1]['war'].SeeCard()
+  
 
 
             if( p0.GetVal() > p1.GetVal() ):
                 #P0 Wins
                 print(str(p0),str(p1),  "   P0 Wins")
 
-                self.players[0].AddCard(p0)
-                self.players[0].AddCard(p1)
+                self.players[0]['hand'].AddCard(  self.players[0]['war'].GetCard()  )
+                self.players[0]['hand'].AddCard(  self.players[1]['war'].GetCard()  )
 
 
             elif( p0.GetVal() < p1.GetVal() ):
                 #P1 Wins
                 print(str(p0),str(p1),  "   P1 Wins")
 
-                self.players[1].AddCard(p0)
-                self.players[1].AddCard(p1)
+                self.players[1]['hand'].AddCard(  self.players[0]['war'].GetCard()  )
+                self.players[1]['hand'].AddCard(  self.players[1]['war'].GetCard()  )
 
             else:
                 #Tie
                 print(str(p0),str(p1),  "   TIE!!")
+                #add more cards
+
+                # Next:
+                # while( not someone Wins):
+
+                #     if 0 > 1
+                #     elif 0<1
+                #     else tie 
+
+
+
 
 
             #Debug output
             for i in range(number_of_players):
-                print(i,"=",str(self.players[i]) )
+                print(i,"=",str(self.players[i]['hand']) )
 
 
             input("Hit Enter....")
