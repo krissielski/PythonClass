@@ -8,7 +8,7 @@ suits = ( 'D', 'H') #, 'S', 'C' )
 ranks = ( '2','3','4','5','6','7','8','9','T','J','Q','K','A' )
 
 #rank to integer
-r2i = { '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':11, 'Q':12, 'K':13, 'A':14 }
+r2i = { '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10, 'A':14 }
 
 
 
@@ -184,46 +184,98 @@ class Game:
                 self.players[i]['war'].AddCard(  self.players[i]['hand'].GetCard() ) 
 
 
-            #Debug
-            print( self.players[0]['war'].SeeCard() , self.players[1]['war'].SeeCard() )
+            winner = False
+            winner_cards = []
 
-            print("0 = ", self.players[0]['war'] )
-            print("1 = ", self.players[1]['war'] )
+            while( not winner ):
 
+                #Debug
+                print( self.players[0]['war'].SeeCard() , self.players[1]['war'].SeeCard() )
 
-
-            #Pull out card to make if statements easier
-            p0 = self.players[0]['war'].SeeCard()
-            p1 = self.players[1]['war'].SeeCard()
-  
+                print("0 = ", self.players[0]['war'] )
+                print("1 = ", self.players[1]['war'] )
 
 
-            if( p0.GetVal() > p1.GetVal() ):
-                #P0 Wins
-                print(str(p0),str(p1),  "   P0 Wins")
 
-                self.players[0]['hand'].AddCard(  self.players[0]['war'].GetCard()  )
-                self.players[0]['hand'].AddCard(  self.players[1]['war'].GetCard()  )
+                #Pull out card to make if statements easier
+                p0 = self.players[0]['war'].SeeCard()
+                p1 = self.players[1]['war'].SeeCard()
+    
 
 
-            elif( p0.GetVal() < p1.GetVal() ):
-                #P1 Wins
-                print(str(p0),str(p1),  "   P1 Wins")
+                if( p0.GetVal() > p1.GetVal() ):
+                    #P0 Wins
+                    print(str(p0),str(p1),  "   P0 Wins")
+                    winner = True
 
-                self.players[1]['hand'].AddCard(  self.players[0]['war'].GetCard()  )
-                self.players[1]['hand'].AddCard(  self.players[1]['war'].GetCard()  )
 
-            else:
-                #Tie
-                print(str(p0),str(p1),  "   TIE!!")
-                #add more cards
+                    #self.players[0]['hand'].AddCard(  self.players[0]['war'].GetCard()  )
+                    #self.players[0]['hand'].AddCard(  self.players[1]['war'].GetCard()  )
 
-                # Next:
-                # while( not someone Wins):
+                    #Put all Player 0 cards in winner_cards
+                    num_cards = self.players[0]['war'].GetNumCards()
+                    for i in range( num_cards ):
+                        winner_cards.append(  self.players[0]['war'].GetCard() )
 
-                #     if 0 > 1
-                #     elif 0<1
-                #     else tie 
+                    #Put all Player 1 cards in winner_cards
+                    num_cards = self.players[1]['war'].GetNumCards()
+                    for i in range( num_cards ):
+                        winner_cards.append(  self.players[1]['war'].GetCard() )
+
+
+                    #Randomize Winner Cards
+                    random.shuffle( winner_cards )
+
+                    #Move all winner_cards to winning had
+                    for i in range (len (winner_cards) ):
+                        self.players[0]['hand'].AddCard( winner_cards.pop() )
+
+
+
+                elif( p0.GetVal() < p1.GetVal() ):
+                    #P1 Wins
+                    print(str(p0),str(p1),  "   P1 Wins")
+                    winner = True
+
+                    #self.players[1]['hand'].AddCard(  self.players[0]['war'].GetCard()  )
+                    #self.players[1]['hand'].AddCard(  self.players[1]['war'].GetCard()  )
+
+
+                    #Put all Player 0 cards in winner_cards
+                    num_cards = self.players[0]['war'].GetNumCards()
+                    for i in range( num_cards ):
+                        winner_cards.append(  self.players[0]['war'].GetCard() )
+
+                    #Put all Player 1 cards in winner_cards
+                    num_cards = self.players[1]['war'].GetNumCards()
+                    for i in range( num_cards ):
+                        winner_cards.append(  self.players[1]['war'].GetCard() )
+
+                    #Randomize Winner Cards
+                    random.shuffle( winner_cards )
+
+                    #Move all winner_cards to winning had
+                    for i in range (len (winner_cards) ):
+                        self.players[1]['hand'].AddCard( winner_cards.pop() )      
+
+                else:
+                    #Tie
+                    print(str(p0),str(p1),  "   TIE!!")
+
+                    for i in range( number_of_players ):
+                        for _n in range( 4 ):
+                            self.players[i]['war'].AddCard(  self.players[i]['hand'].GetCard()   )
+
+
+
+                    #add more cards
+
+                    # Next:
+                    # while( not someone Wins):
+
+                    #     if 0 > 1
+                    #     elif 0<1
+                    #     else tie 
 
 
 
