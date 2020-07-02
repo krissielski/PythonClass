@@ -264,35 +264,39 @@ class Game:
 
                     for i in range( number_of_players ):
                         for _n in range( 4 ):
-                            self.players[i]['war'].AddCard(  self.players[i]['hand'].GetCard()   )
+                            if( self.players[i]['hand'].GetNumCards() > 0 ):
+                                self.players[i]['war'].AddCard(  self.players[i]['hand'].GetCard()   )
 
 
-
-                    #add more cards
-
-                    # Next:
-                    # while( not someone Wins):
-
-                    #     if 0 > 1
-                    #     elif 0<1
-                    #     else tie 
-
-
-
-
+            #END while( not winner ):
 
             #Debug output
             for i in range(number_of_players):
                 print(i,"=",str(self.players[i]['hand']) )
 
 
+            #Check for Player 0
+            if( self.players[0]['hand'].GetNumCards() == 0 ):
+                print()
+                break
+
+            #Check for Player 1
+            if( self.players[1]['hand'].GetNumCards() == 0 ):
+                print()
+                print("Player 0 is the winnner!!!!!")
+                break
+
+
+
             input("Hit Enter....")
 
             turn += 1
 
+        #END while( True ):
 
 
-
+#END class Game
+###################################################################
 
 
 
